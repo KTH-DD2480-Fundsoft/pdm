@@ -10,7 +10,7 @@ A package manager for python projects.
 
 ## Onboarding experience
 
-We continued with the project we worked on in assignment 3.
+We continued with the project we worked on in assignment 3. Below is our onboarding experience from the project report for assignment 3.
 
 The project has a good CONTRIBUTING.md, where clear instructions are given
 on how to organize ones contribution. The project recomends using it's own 
