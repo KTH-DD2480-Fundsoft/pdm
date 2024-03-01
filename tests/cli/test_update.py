@@ -259,6 +259,6 @@ def test_update_group_not_in_lockfile(project, working_set, pdm):
 
 def test_specific_argument(project, pdm):
     pdm(["add", "requests"], obj=project, strict=True)
-    pdm(["update", "requests", "--update-specific", "jinja2"], obj=project, strict=True)
+    pdm(["update", "--allow-transitive", "urllib3"], obj=project, strict=True)
     pass
     
