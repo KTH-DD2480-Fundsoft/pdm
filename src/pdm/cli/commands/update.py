@@ -66,6 +66,13 @@ class Command(BaseCommand):
             action="store_false",
             help="Only update lock file but do not sync packages",
         )
+        parser.add_argument(
+            "--update-specific",
+            nargs=1,
+            metavar="SUB-DEPENDENCY",
+            dest="specific_dependency",
+            help="Update specific dependency and its sub-dependencies if needed",
+        )
         parser.add_argument("packages", nargs="*", help="If packages are given, only update them")
         parser.set_defaults(dev=None)
 
@@ -85,6 +92,7 @@ class Command(BaseCommand):
             prerelease=options.prerelease,
             fail_fast=options.fail_fast,
             hooks=HookManager(project, options.skip),
+            specific=options.specific_dependency
         )
 
     @staticmethod
@@ -104,6 +112,7 @@ class Command(BaseCommand):
         prerelease: bool | None = None,
         fail_fast: bool = False,
         hooks: HookManager | None = None,
+        specific : str | None = None
     ) -> None:
         """Update specified packages or all packages"""
         from itertools import chain
@@ -114,6 +123,8 @@ class Command(BaseCommand):
         from pdm.models.specifiers import get_specifier
         from pdm.utils import normalize_name
 
+        if specific:
+            raise NotImplementedError(specific)
         hooks = hooks or HookManager(project)
         check_project_file(project)
         if len(packages) > 0 and (top or len(selection.groups) > 1 or not selection.default):

@@ -255,3 +255,10 @@ def test_update_group_not_in_lockfile(project, working_set, pdm):
     result = pdm(["update", "--group", "extra"], obj=project)
     assert result.exit_code != 0
     assert "Requested groups not in lockfile: extra" in result.stderr
+
+
+def test_specific_argument(project, pdm):
+    pdm(["add", "requests"], obj=project, strict=True)
+    pdm(["update", "requests", "--update-specific", "jinja2"], obj=project, strict=True)
+    pass
+    
