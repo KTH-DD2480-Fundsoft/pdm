@@ -123,8 +123,6 @@ class Command(BaseCommand):
         from pdm.models.specifiers import get_specifier
         from pdm.utils import normalize_name
 
-        if allow_transitives:
-            raise NotImplementedError()
         hooks = hooks or HookManager(project)
         check_project_file(project)
         if len(packages) > 0 and (top or len(selection.groups) > 1 or not selection.default):
@@ -146,17 +144,24 @@ class Command(BaseCommand):
                 raise ProjectError(f"Requested group not in lockfile: {group}")
             dependencies = all_dependencies[group]
             for name in packages:
-                matched_name = next(
-                    (k for k in dependencies if normalize_name(strip_extras(k)[0]) == normalize_name(name)),
+                normalized_name = normalize_name(name)
+                matched_req = next(
+                    (v for k,v in dependencies.items() if normalize_name(strip_extras(k)[0]) == normalized_name),
                     None,
                 )
-                if not matched_name:
+                if not matched_req and allow_transitives:
+                    candidates = project.locked_repository.all_candidates
+                    matched_req = next(
+                        (v.req for k,v in candidates.items() if normalize_name(strip_extras(k)[0]) == normalized_name),
+                        None,
+                    )
+                if not matched_req:
                     raise ProjectError(
                         f"[req]{name}[/] does not exist in [primary]{group}[/] "
                         f"{'dev-' if selection.dev else ''}dependencies."
                     )
-                dependencies[matched_name].prerelease = prerelease
-                updated_deps[group][matched_name] = dependencies[matched_name]
+                matched_req.prerelease = prerelease
+                updated_deps[group][normalized_name] = matched_req
             project.core.ui.echo(
                 "Updating packages: {}.".format(
                     ", ".join(f"[req]{v}[/]" for v in chain.from_iterable(updated_deps.values()))
@@ -194,7 +199,8 @@ class Command(BaseCommand):
         if not dry_run:
             if unconstrained:
                 for group, deps in updated_deps.items():
-                    project.add_dependencies(deps, group, selection.dev or False)
+                    direct_deps = {dep: req for dep,req in deps.items() if dep in all_dependencies[group]}
+                    project.add_dependencies(direct_deps, group, selection.dev or False)
             project.write_lockfile(project.lockfile._data, False)
         if sync or dry_run:
             do_sync(
