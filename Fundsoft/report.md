@@ -65,3 +65,79 @@ The purpose of pdm is to provide a framework for python projects that handles pa
 - `do_update` is the function that is run to update the packages in `pyproject.toml`. The function checks for potential errors with rather complicated boolean expressions at four separate times.
 
 - `synchronize`: pdm is a package manager and includes several classes of `synchronizers` that take care of synching which packages to install, update or remove from the local environment. The `synchronize` function belongs to one of these classes and is used to decide which packages need to be installed or removed. More specifically the function compares the desired packages with the current working set through a helper function and creates a "to_do" dictionary that logs which packages need to be added, removed, or updated in the environment using the keys "add", "remove" or "update". It then splits these tasks into two lists: "sequential" and "parallel" tasks. It then iterates through all the tasks and attempts to complete them. If an installation fails then the function can either be set to continue with the remaining packages or break the installation depending on the users' input and preference. 
+
+
+## Effort spent
+
+For each team member, how much time was spent in
+
+1. plenary discussions/meetings;
+
+2. discussions within parts of the group;
+
+3. reading documentation;
+
+4. configuration and setup;
+
+5. analyzing code/output;
+
+6. writing documentation;
+
+7. writing code;
+
+8. running code?
+
+For setting up tools and libraries (step 4), enumerate all dependencies
+you took care of and where you spent your time, if that time exceeds
+30 minutes.
+
+## Overview of issue(s) and work done.
+
+Title:
+
+URL:
+
+Summary in one or two sentences
+
+Scope (functionality and code affected).
+
+## Requirements for the new feature or requirements affected by functionality being refactored
+
+Optional (point 3): trace tests to requirements.
+
+## Code changes
+
+### Patch
+
+(copy your changes or the add git command to show them)
+
+git diff ...
+
+Optional (point 4): the patch is clean.
+
+Optional (point 5): considered for acceptance (passes all automated checks).
+
+## Test results
+
+Overall results with link to a copy or excerpt of the logs (before/after
+refactoring).
+
+## UML class diagram and its description
+
+### Key changes/classes affected
+
+Optional (point 1): Architectural overview.
+
+Optional (point 2): relation to design pattern(s).
+
+## Overall experience
+
+What are your main take-aways from this project? What did you learn?
+
+How did you grow as a team, using the Essence standard to evaluate yourself?
+
+Optional (point 6): How would you put your work in context with best software engineering practice?
+
+Optional (point 7): Is there something special you want to mention here?
+
+Optional (point 8): Where do you put the project that you have chosen in an ecosystem of open-source and closed-source software? Is your project (as it is now) something that has replaced or can replace similar proprietary software? Why (not)? (Open source vs closed source software)
