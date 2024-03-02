@@ -144,6 +144,9 @@ For this assignment we had two start-up meetings where we discussed the issue, h
 ### Work process
 After creating a concrete and stable plan for how we could effectively solve this issue we worked both independently as well as utilizing pair programming over discord to solve the different issues. We benefited a lot from pair programming for this assignment as it is quite challenging to understand all the details and nuances of the open source project. Thus it was very helpful to discuss things and help each other understand different data structures and dependencies. When we had solved the issue with regards to creating a code patch and developing our own tests after a couple of days we finalized the report and prepared for the presentation. All tests that we implemented passed and worked well.
 
+### Project documentation and tools
+The pdm open source project has great onboarding documentation and many different guides to explain testing, development, linting requirements etc. It does however lack in documentation covering how the many different data strucutres are built and interact with each other. Likewise most functions, tests and classes are lacking documentation explaining their functionality. This made it quite difficult to start solving the issue at hand. pdm also has well established incorporated tools that include automatic testing and coverage tools along with easy to use install tools. This made it very easy for us to tests various things and see if our patch worked without the need to create our own test package.  
+
 
 ### Main take-aways
 What are your main take-aways from this project? What did you learn?
