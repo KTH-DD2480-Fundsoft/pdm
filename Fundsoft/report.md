@@ -100,6 +100,20 @@ Scope (functionality and code affected).
 
 Optional (point 3): trace tests to requirements.
 
+* test_update_transitive()
+    * This test adds the dependency `requests` and later updates the sub-dependency `chardet`. Asserts that the sub-dependency is still not in the lock file and that the sub-dependency has been updated to the newest version from the virtual repository. Also asserts that the dependency `requests` has not been updated as this was not requested. 
+    * Fulfills requirements **ID 1** and **ID 5**
+
+* test_update_transitive_nonexistant_dependencies()
+    * This test adds the dependency `requests` and later attempts to update the non-existant sub-dependency `numpy`. This results in a "ProjectError" which is checked with two assertions. Thus throwing an error that the sub-dependency doesn't exist in the lock file.
+    * Fulfills requirements **ID 2**
+
+* test_update_transitive_non_transitive_dependencies()
+    * This test adds two dependencies `requests` and `pytz` and later updates both of these along with the sub-dependency `chardet`. It asserts that the sub-dependency is still not in the lock file and asserts that the sub-dependency and the two dependencies are both updated to newer versions from the virtual repository even when utilizing the flag "--allow_transitive". 
+    * Fulfills requirements **ID 3**, **ID 4** and **ID 5**
+
+The three tests fulfill requirements **ID 1**, **ID 2**, **ID 3**, **ID 4** and **ID 5**. Thus we can see that our three different tests in turn test all our stated requirements resulting in good test coverage for our patch.
+
 ## Code changes
 
 ### Patch
