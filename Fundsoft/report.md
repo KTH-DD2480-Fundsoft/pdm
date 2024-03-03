@@ -45,8 +45,35 @@ product are very good and the product works as intended.
 
 ## Overview of the architecture and purpose of pdm
 
-The purpose of pdm is to provide a framework for python projects that handles package dependencies automatically. It also resolves the version requirements for all dependencies. The user specifies what version of what library that the project needs in a `pyproject.toml` file or by adding it with commands from the command line. Unlike other Python packaging tools, like Poetry and Hatch, pdm is not tightly integrated into a built-in build backend. Instead it uses PEP 517, a build-system independent format. pdm also allows the user to customize it with plugins.
+A package manager is a system for handling the dependencies (or "packages") of a project. It finds the correct package files in a remote repository, checks them for vulnerabilities, downloads them and puts them in the correct locations. It also does this for all the package's sub-dependencies and removes all the appropriate files when the user wants to remove packages. `pdm` is a package manager for python and its purpose is to provide extra flexibility and customizability compared to other existing python package managers like Poetry and Hatch. 
 
+### Overview of PDM
+**Build system**<br>
+`pdm` uses a PEP 517 build backend, which is a build-system independent format, instead of relying on a tightly integrated built-in build backend like Poetry and Hatch does. This makes it possible for the user to choose their own build backend.
+
+**Metadata**<br>
+One of the features of pip is that it uses PEP 621 for project metadata and supports the latest PEP standard. The core metadata is described in a `pyproject.toml` file according to the latest standards which eliminates previous ambiguities. An example of this is that it is required to declare if metadata is static or dynamic.
+
+**Resolving**<br>
+When a new dependency is added, removed or updated `pdm` runs a series of check to make sure that the new set of dependencies are valid and there are no conflicts between dependencies. If there is, `pdm` tries to update and alter the versions within allowed ranges. 
+
+**Lock file**<br>
+`pdm` generates a lock file `pdm.lock` with the resolved result of all dependencies. locking in a package manager means locking down the versions of the dependencies that are used in the project. The function `do_lock` in `src/pdm/cli/actions.py` does that locking as well as updates the lock file. 
+
+**CLI interface**<br>
+The CLI interface consists of an extensive list of commands and options for initializing and managing the dependencies in the project. Below are a few examples of common CLI commands.
+- `init` - initializes a pyproject.tom
+- `add` - add packages to pyproject.toml and install them
+- `build` - build artifacts for distribution 
+- `remove` - removes files that match the argument pattern. 
+- `update` - all packages or only a specified package. `--update-eager` is an option for `pdm` to try to update the packages and their dependencies recursively. Another example of an option is `--update-all` which updates all packages in the toml file and their subdependencies. 
+
+For a more detailed overview of CLI commands and their options visit https://pdm-project.org/latest/reference/cli/
+
+**Plugin System**<br>
+This is a system that allows user to develop new `pdm` commands and command options and share them to the community. To develop a new command the user uses inheritance from a BaseCommand class and can add arguments with add_arguments and tether actions with handle. This is added to PyPI by the command publish. 
+
+**Architecture**<br>
 <div style="text-align:center;">
     <figure>
         <img src="img/architecture-diagram.png" alt="Diagram of the architecture" width="500"/>
@@ -54,17 +81,8 @@ The purpose of pdm is to provide a framework for python projects that handles pa
     </figure>
 </div>
 
-
-**Key functions in pdm source code we described in the report for assigment 3:**
-- `_parse_setup_cfg`is responsible for parsing a setup.cfg file. It extracts various metadata fields and stores them in a dictionary `result` that is returned.
-
-- `do_lock`: locking in a package manager means locking down the versions of the dependencies that are used in the project. `do_lock` does that locking as well as updating the lock file. 
-
-- `do_add` is the function that is run to add packages to the project, i.e. to `pyproject.toml`. The process of adding requirements requires checking dependecies (updating the lockfile, checking the dependency group), adding dependencies, and even parsing dependencies. The function also normalizes names and has different logic depending on what flag is given to the command. 
-
-- `do_update` is the function that is run to update the packages in `pyproject.toml`. The function checks for potential errors with rather complicated boolean expressions at four separate times.
-
-- `synchronize`: pdm is a package manager and includes several classes of `synchronizers` that take care of synching which packages to install, update or remove from the local environment. The `synchronize` function belongs to one of these classes and is used to decide which packages need to be installed or removed. More specifically the function compares the desired packages with the current working set through a helper function and creates a "to_do" dictionary that logs which packages need to be added, removed, or updated in the environment using the keys "add", "remove" or "update". It then splits these tasks into two lists: "sequential" and "parallel" tasks. It then iterates through all the tasks and attempts to complete them. If an installation fails then the function can either be set to continue with the remaining packages or break the installation depending on the users' input and preference. 
+**Conclusion**<br>
+`pdm` is a python dependency manager that offers customizability and flexibility compared to alternative dependency managers. It is capable of solving dependency conflicts between all dependencies and stores the resolved result in a lock file. It uses modern standards for describing its core metadata unambiguously and supports users to share plugins to PyPI.
 
 
 ## Effort spent
