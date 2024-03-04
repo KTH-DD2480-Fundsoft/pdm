@@ -124,6 +124,20 @@ For each team member, how much time was spent in
 
 8. running code?
 
+|                 x      | Dante | Ludvig | Rasmus | Sebastian | Victor |
+| :------ | :-----: | :-----: | :-----: | :-----: | :-----: |
+| Meetings/discussions  | 2     | 1.5    | 3      | 2         | 5      |
+| Group discussions     | 2     | 1.5    | 3      | 3         | 3      |
+| Reading documentation | 6     | 2      | 3      | 4         | 1      |
+| Config and setup      | 0     | 0.5    | 0.5    | 0         | 0.5    |
+| Analysing code/ouput  | 6     | 1      | 2      | 3         | 3      |
+| Writing documentation | 0     | 8      | 4      | 8         | 3      |
+| Writing code          | 0     | 6      | 7      | 0         | 4      |
+| Running code          | 0     | 1      | 1      | 1         | 1      |
+| Total number of hours | 16     | 21.5   | 23.5      | 21         | 20.5   |
+
+
+
 For setting up tools and libraries (step 4), enumerate all dependencies
 you took care of and where you spent your time, if that time exceeds
 30 minutes.
