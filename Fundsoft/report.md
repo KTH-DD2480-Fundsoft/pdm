@@ -141,10 +141,44 @@ Optional (point 2): relation to design pattern(s).
 
 ## Overall experience
 
+Overall work
+
+Our contribution to the open source library pdm can be summarized as the following:
+
+### Chosen issue and open source interaction
+Chosen issue from pdm which was assigned to Rasmus (rasmus-d): https://github.com/pdm-project/pdm/issues/2628 
+
+This issue intends to tackle a problem with pdm where a user cannot update a single sub-dependency. Before our patch is was only possible for a user to update a single dependency, all dependencies, a dependency with its own sub-dependencies or all dependencies + all subdependencies but not a single sub-dependecy. Thus the issue relates to implementing a feature where a user can update a specific sub-dependency without changing/updating any other dependency or subdependency. 
+
+It was very easy for Rasmus to simply comment and ask if we could be assigned to this issue on the projects github. The open source project manager responded to us the following day and gave us the issue. We had an overall very positive experience with the open source community. It is not guarenteed that a group of students would be given an issue from a well functioning open source project so we were very grateful for the opportunity.
+
+### Distribution of work 
+For this assignment we had two start-up meetings where we discussed the issue, how we roughly wanted to tackle it along with creating specific atomic issues that could be handled individually. After these were all created on GitHub some members of the group starting looking at solving the issue while others started working on tests for the issue. At the same time we discussed how we wanted to structure the report and create more atomic issues related to this. As we were already familiar with the pdm library we could effectively do all these things simultaneously and get to work quite quickly with little extra onboarding. It was also beneficial to do the tests and solving the issue at the same time in order to see how well they coincided with each other and allowed us to continuosly assess our patch.
+
+### Work process
+After creating a concrete and stable plan for how we could effectively solve this issue we worked both independently as well as utilizing pair programming over discord to solve the different issues. We benefited a lot from pair programming for this assignment as it is quite challenging to understand all the details and nuances of the open source project. Thus it was very helpful to discuss things and help each other understand different data structures and dependencies. When we had solved the issue with regards to creating a code patch and developing our own tests after a couple of days we finalized the report and prepared for the presentation. All tests that we implemented passed and worked well.
+
+### Project documentation and tools
+The pdm open source project has great onboarding documentation and many different guides to explain testing, development, linting requirements etc. It does however lack in documentation covering how the many different data strucutres are built and interact with each other. Likewise most functions, tests and classes are lacking documentation explaining their functionality. This made it quite difficult to start solving the issue at hand. pdm also has well established incorporated tools that include automatic testing and coverage tools along with easy to use install tools. This made it very easy for us to tests various things and see if our patch worked without the need to create our own test package.  
+
+
+### Main take-aways
 What are your main take-aways from this project? What did you learn?
 
+* Importance of clear issue descriptions and conveying ones ideas when working on an open source project
+    * As anyone can attempt to contribute to an open source project it is very important to be extra clear with the desired functionalities of ones issues as people will not be fully emersed in the details of the project
+    * We were very thankful for the clear description of the issue along with fast response times from the open source manager. This helped us throughly understand the problem and distribute the work.
+* Reinforce the importance of systematically organizing the group in order to tackle the problem efficiently
+    * As this was a very open problem we felt that we really benefited from having start-up meetings aimed to clearly deconstruct the problem into atomic issues and spread the workload.
+* We've learnt how to create a final patch that can be easily merged into an open source project and that is clean and almost surgical in the sense that it does not negatively affect the exiting project.
+* It is immensely important to create and adhere to guidelines when contributing to an open source project. Otherwise you risk merging many different styles from potentially hundreds of small contributors which can result in a chaotic mess.
+
+### Essence
 How did you grow as a team, using the Essence standard to evaluate yourself?
 
+We felt that we worked very well during this project. This along with our previous progress and experiences from earlier assignments make us we feel that we've reached the working well phase of our way-of-working. Our team naturally follows our workflow guide regarding issues, testing and implementations of testing and documentation. This along with the fact the tools and methods we use actually help us perform good work are clear signs of a working group. When it comes to our team we also feel that we're performing on this front as we've worked together for quite some time and have established a functioning workflow independent of outside help. We feel that this last assignment has been a great oppurtunity to improve our ability to take initiative and tackle new uncharted problems without a clear framework. It has allowed us to actually test our new found skills and experiences and observe that they pratically work in the real world.
+
+### P+ 
 You can argue critically about the benefits, drawbacks, and limitations of your work carried out, in the context of current software engineering practice, such as the SEMAT kernel (covering alphas other than Team/Way of Working).
 
 Optional (point 6): How would you put your work in context with best software engineering practice?
