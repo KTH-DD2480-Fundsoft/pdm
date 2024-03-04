@@ -422,6 +422,7 @@ complete -c pdm -A -n '__fish_seen_subcommand_from sync' -l verbose -d 'Use `-v`
 
 # update
 complete -c pdm -f -n '__fish_pdm_41ba8a56174f8367_complete_no_subcommand' -a update -d 'Update package(s) in pyproject.toml'
+complete -c pdm -A -n '__fish_seen_subcommand_from update' -l allow-transitive -d 'Allow specifying transitive dependencies'
 complete -c pdm -A -n '__fish_seen_subcommand_from update' -l dev -d 'Select dev dependencies'
 complete -c pdm -A -n '__fish_seen_subcommand_from update' -l fail-fast -d 'Abort on first installation error'
 complete -c pdm -A -n '__fish_seen_subcommand_from update' -l frozen-lockfile -d 'Don\'t try to create or update the lockfile. [env var: PDM_FROZEN_LOCKFILE]'
