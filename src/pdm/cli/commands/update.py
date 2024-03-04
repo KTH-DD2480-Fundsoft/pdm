@@ -152,7 +152,7 @@ class Command(BaseCommand):
                 if not matched_req and allow_transitives:
                     candidates = project.locked_repository.all_candidates
                     matched_req = next(
-                        (v.req for k,v in candidates.items() if normalize_name(strip_extras(k)[0]) == normalized_name),
+                        (v.req for k,v in candidates.items() if normalize_name(strip_extras(k)[1]) == normalized_name),
                         None,
                     )
                 if not matched_req:
