@@ -2,7 +2,7 @@
 
 ## Idea
 
-The major drawback of our patch to solve issue #2628 from the pdm GitHub is the increased cyclomatic complexity and overall length of the do_update() function. Thus this refactor-plan aims to provide one possible way of refactoring it into smaller functions in order to improve readability and facilitate future improvements along with reducing the technical debt acquired from our patch. Our way of achieving this is by dividing the function into several smaller functions. 
+The major drawback of our patch to solve issue #2628 from the PDM GitHub is the increased cyclomatic complexity and overall length of the do_update() function. Thus this refactor-plan aims to provide one possible way of refactoring it into smaller functions in order to improve readability and facilitate future improvements along with reducing the technical debt acquired from our patch. Our way of achieving this is by dividing the function into several smaller functions. 
 
 Our refactor plan mainly consists of the `Extract function` technique along with with extracting conditional expressions using the `Consolidate Conditinoal Expression` technique.
 
@@ -138,7 +138,7 @@ def do_update(
    the given group. This could be moved out to a seperate function.
    Moreover, the if-else statement which encapsulates this call can 
    be reduced by replacing the if-body with a function generalising
-   these statements. A function named `update_groups_only` or similar
+   these statements. A function named `update_packages` or similar
    as this branch deals with unspecified updates (no explicitly named
    package).
 
@@ -228,7 +228,7 @@ def do_update(
 -                    )
 -                matched_req.prerelease = prerelease
 -                updated_deps[group][normalized_name] = matched_req
-+                mathced_req, updated_deps = update_groups_only(selection, locked_groups, all_dependencies, packages, normalize_name, dependencies, updated_deps, allow_transitives, project)
++                mathced_req, updated_deps = update_packages(selection, locked_groups, all_dependencies, packages, normalize_name, dependencies, updated_deps, allow_transitives, project)
             project.core.ui.echo(
                 "Updating packages: {}.".format(
                     ", ".join(f"[req]{v}[/]" for v in chain.from_iterable(updated_deps.values()))
@@ -306,7 +306,7 @@ def do_update(
 ```
 
 ```diff
-+ def update_groups_only(selection, locked_groups, all_dependencies, packages, normalize_name, dependencies, updated_deps, allow_transitives, project):
++ def update_packages(selection, locked_groups, all_dependencies, packages, normalize_name, dependencies, updated_deps, allow_transitives, project):
 +    group = selection.one()
 +    if locked_groups and group not in locked_groups:
 +        raise ProjectError(f"Requested group not in lockfile: {group}")
