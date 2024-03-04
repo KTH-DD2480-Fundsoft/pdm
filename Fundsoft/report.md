@@ -65,15 +65,15 @@ For each team member, how much time was spent in
 
 |                 x      | Dante | Ludvig | Rasmus | Sebastian | Victor |
 | :------ | :-----: | :-----: | :-----: | :-----: | :-----: |
-| Meetings/discussions  | x     | 1.5    | 3      | 2         | 5      |
-| Group discussions     | x     | 1.5    | 3      | 3         | 3      |
-| Reading documentation | x     | 2      | 3      | 4         | 1      |
-| Config and setup      | x     | 0.5    | 0.5      | x         | 0.5    |
-| Analysing code/ouput  | x     | 1      | 2      | 3         | 3      |
-| Writing documentation | x     | 8      | 4      | 8         | 3      |
-| Writing code          | x     | 6      | 7      | x         | 4      |
-| Running code          | x     | 1      | 1      | 1         | 1      |
-| Total number of hours | x     | 21.5   | 23.5      | 21         | 20.5   |
+| Meetings/discussions  | 2     | 1.5    | 3      | 2         | 5      |
+| Group discussions     | 2     | 1.5    | 3      | 3         | 3      |
+| Reading documentation | 6     | 2      | 3      | 4         | 1      |
+| Config and setup      | 0     | 0.5    | 0.5    | x         | 0.5    |
+| Analysing code/ouput  | 6     | 1      | 2      | 3         | 3      |
+| Writing documentation | 0     | 8      | 4      | 8         | 3      |
+| Writing code          | 0     | 6      | 7      | x         | 4      |
+| Running code          | 0     | 1      | 1      | 1         | 1      |
+| Total number of hours | 16     | 21.5   | 23.5      | 21         | 20.5   |
 
 
 
