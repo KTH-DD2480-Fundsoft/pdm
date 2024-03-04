@@ -173,7 +173,14 @@ Optional (point 5): considered for acceptance (passes all automated checks).
 Overall results with link to a copy or excerpt of the logs (before/after
 refactoring).
 
-## UML class diagram and its description
+## UML class diagram of key features affected by the issue
+<div style="text-align:center;">
+    <figure>
+        <img src="img/uml-for-affected-key-features.png" alt="UML class diagram of key features affected by the issue" width="700"/>
+        <figcaption>Key features affected by the issue.</figcaption>
+    </figure>
+</div>
+
 
 ### Key changes/classes affected
 
