@@ -1,0 +1,436 @@
+pdm git:(develop) pdm test
+==================================================================================================================== test session starts =====================================================================================================================
+platform darwin -- Python 3.11.7, pytest-8.0.2, pluggy-1.4.0
+rootdir: /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm
+configfile: pyproject.toml
+testpaths: tests/
+plugins: cov-4.1.0, rerunfailures-13.0, mock-3.12.0, xdist-3.5.0, pytest_httpserver-1.0.10
+collected 829 items
+
+tests/cli/test_add.py ...............................                                                                                                                                                                                                  [  3%]
+tests/cli/test_build.py .............                                                                                                                                                                                                                  [  5%]
+tests/cli/test_cache.py ............                                                                                                                                                                                                                   [  6%]
+tests/cli/test_config.py ..................                                                                                                                                                                                                            [  8%]
+tests/cli/test_fix.py .....                                                                                                                                                                                                                            [  9%]
+tests/cli/test_hooks.py ...........................................................................................                                                                                                                                    [ 20%]
+tests/cli/test_init.py .........                                                                                                                                                                                                                       [ 21%]
+tests/cli/test_install.py .............................                                                                                                                                                                                                [ 25%]
+tests/cli/test_list.py ...............................                                                                                                                                                                                                 [ 28%]
+tests/cli/test_lock.py ..............................                                                                                                                                                                                                  [ 32%]
+tests/cli/test_others.py .......................                                                                                                                                                                                                       [ 35%]
+tests/cli/test_publish.py ............                                                                                                                                                                                                                 [ 36%]
+tests/cli/test_remove.py .............                                                                                                                                                                                                                 [ 38%]
+tests/cli/test_run.py ...........................................................                                                                                                                                                                      [ 45%]
+tests/cli/test_self_command.py ........                                                                                                                                                                                                                [ 46%]
+tests/cli/test_template.py ....                                                                                                                                                                                                                        [ 46%]
+tests/cli/test_update.py .....................                                                                                                                                                                                                         [ 49%]
+tests/cli/test_use.py ......                                                                                                                                                                                                                           [ 50%]
+tests/cli/test_utils.py .                                                                                                                                                                                                                              [ 50%]
+tests/cli/test_venv.py ...............................                                                                                                                                                                                                 [ 53%]
+tests/models/test_backends.py ...........                                                                                                                                                                                                              [ 55%]
+tests/models/test_candidates.py ........x.........................                                                                                                                                                                                     [ 59%]
+tests/models/test_marker.py .........                                                                                                                                                                                                                  [ 60%]
+tests/models/test_requirements.py ....................                                                                                                                                                                                                 [ 62%]
+tests/models/test_setup_parsing.py ..........                                                                                                                                                                                                          [ 64%]
+tests/models/test_specifiers.py ..........................................                                                                                                                                                                             [ 69%]
+tests/models/test_versions.py ...................                                                                                                                                                                                                      [ 71%]
+tests/resolver/test_resolve.py ....................................                                                                                                                                                                                    [ 75%]
+tests/test_formats.py ................                                                                                                                                                                                                                 [ 77%]
+tests/test_installer.py ................                                                                                                                                                                                                               [ 79%]
+tests/test_integration.py ...                                                                                                                                                                                                                          [ 79%]
+tests/test_plugin.py .....                                                                                                                                                                                                                             [ 80%]
+tests/test_project.py ...................................                                                                                                                                                                                              [ 84%]
+tests/test_signals.py ..                                                                                                                                                                                                                               [ 85%]
+tests/test_utils.py ...............................s............................................................................................                                                                                                       [100%]
+
+========================================================================================================================= XFAILURES ==========================================================================================================================
+_______________________________________________________________________________________________________________ test_parse_abnormal_specifiers _______________________________________________________________________________________________________________
+
+project = <Project '/private/var/folders/gj/jcrsbmjx5hg_wmjqvmkd3sbw0000gn/T/pytest-of-seb/pytest-62/test_parse_abnormal_specifiers0'>
+
+    @pytest.mark.xfail(reason="packaging 22 no longer supports legacy specifiers")
+    @pytest.mark.usefixtures("local_finder")
+    def test_parse_abnormal_specifiers(project):
+        req = parse_requirement("http://fixtures.test/artifacts/celery-4.4.2-py2.py3-none-any.whl")
+        candidate = Candidate(req)
+>       assert candidate.prepare(project.environment).get_dependencies_from_metadata()
+
+tests/models/test_candidates.py:97:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/pdm/models/candidates.py:618: in get_dependencies_from_metadata
+    return filter_requirements_with_extras(self.metadata.requires or [], extras)
+src/pdm/models/requirements.py:442: in filter_requirements_with_extras
+    _r = parse_requirement(req)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+line = 'pytz (>dev)', editable = False
+
+    def parse_requirement(line: str, editable: bool = False) -> Requirement:
+        m = _vcs_req_re.match(line)
+        r: Requirement
+        if m is not None:
+            r = VcsRequirement.create(**m.groupdict())
+        else:
+            # Special handling for hatch local references:
+            # https://hatch.pypa.io/latest/config/dependency/#local
+            # We replace the {root.uri} temporarily with a dummy URL header
+            # to make it pass through the packaging.requirement parser
+            # and then revert it.
+            root_url = path_to_url(Path().as_posix())
+            replaced = "{root:uri}" in line
+            if replaced:
+                line = line.replace("{root:uri}", root_url)
+            try:
+                pkg_req = parse_as_pkg_requirement(line)
+            except InvalidRequirement as e:
+                m = _file_req_re.match(line)
+                if m is None:
+                    raise RequirementError(f"{line}: {e}") from None
+                args = m.groupdict()
+                if not line.startswith(".") and not args["url"] and args["path"] and not os.path.exists(args["path"]):
+>                   raise RequirementError(f"{line}: {e}") from None
+E                   pdm.exceptions.RequirementError: pytz (>dev): Expected matching RIGHT_PARENTHESIS for LEFT_PARENTHESIS, after version specifier
+E                       pytz (>dev)
+E                            ~^
+
+src/pdm/models/requirements.py:492: RequirementError
+------------------------------------------------------------------------------------------------------------------- Captured stdout setup --------------------------------------------------------------------------------------------------------------------
+Changes are written to pyproject.toml.
+Changes are written to pyproject.toml.
+--------------------------------------------------------------------------------------------------------------------- Captured log call ----------------------------------------------------------------------------------------------------------------------
+INFO     unearth.preparer:preparer.py:341 Downloading <Link http://fixtures.test/artifacts/celery-4.4.2-py2.py3-none-any.whl (from None)> (size unknown)
+====================================================================================================================== warnings summary ======================================================================================================================
+tests/cli/test_update.py::test_specific_argument
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping urllib3@2.2.1 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of urllib3 that supports Python>=3.7 will be used.
+  If you want to install urllib3@2.2.1, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/cli/test_update.py::test_specific_argument
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping urllib3@2.2.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of urllib3 that supports Python>=3.7 will be used.
+  If you want to install urllib3@2.2.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/cli/test_update.py::test_specific_argument
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping urllib3@2.1.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of urllib3 that supports Python>=3.7 will be used.
+  If you want to install urllib3@2.1.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@5.0.3 because it requires Python>=3.10 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@5.0.3, narrow down the `requires-python` range to include this version. For example, ">=3.10" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@5.0.2 because it requires Python>=3.10 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@5.0.2, narrow down the `requires-python` range to include this version. For example, ">=3.10" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@5.0.1 because it requires Python>=3.10 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@5.0.1, narrow down the `requires-python` range to include this version. For example, ">=3.10" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@5.0 because it requires Python>=3.10 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@5.0, narrow down the `requires-python` range to include this version. For example, ">=3.10" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.11 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.11, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.10 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.10, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.9 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.9, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.8 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.8, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.7 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.7, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.6 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.6, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.5 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.5, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.4 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.4, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.3 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.3, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.2 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.2, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2.1 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2.1, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.2 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.2, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.13 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.13, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.12 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.12, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.11 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.11, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.10 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.10, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.9 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.9, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.8 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.8, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.7 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.7, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.6 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.6, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.5 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.5, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.4 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.4, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.3 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.3, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.2 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.2, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1.1 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1.1, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.1 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.1, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0.10 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0.10, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0.9 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0.9, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0.8 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0.8, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0.7 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0.7, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0.6 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0.6, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0.5 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0.5, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0.4 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0.4, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0.3 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0.3, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0.2 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0.2, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0.1 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0.1, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping django@4.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of django that supports Python>=3.7 will be used.
+  If you want to install django@4.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping typing-extensions@4.10.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of typing-extensions that supports Python>=3.7 will be used.
+  If you want to install typing-extensions@4.10.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping typing-extensions@4.9.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of typing-extensions that supports Python>=3.7 will be used.
+  If you want to install typing-extensions@4.9.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+tests/test_integration.py::test_basic_integration[3.11]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping typing-extensions@4.8.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of typing-extensions that supports Python>=3.7 will be used.
+  If you want to install typing-extensions@4.8.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping importlib-metadata@7.0.1 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of importlib-metadata that supports Python>=3.7 will be used.
+  If you want to install importlib-metadata@7.0.1, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping importlib-metadata@7.0.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of importlib-metadata that supports Python>=3.7 will be used.
+  If you want to install importlib-metadata@7.0.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping importlib-metadata@6.11.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of importlib-metadata that supports Python>=3.7 will be used.
+  If you want to install importlib-metadata@6.11.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping importlib-metadata@6.10.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of importlib-metadata that supports Python>=3.7 will be used.
+  If you want to install importlib-metadata@6.10.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping importlib-metadata@6.9.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of importlib-metadata that supports Python>=3.7 will be used.
+  If you want to install importlib-metadata@6.9.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping importlib-metadata@6.8.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of importlib-metadata that supports Python>=3.7 will be used.
+  If you want to install importlib-metadata@6.8.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping zipp@3.17.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of zipp that supports Python>=3.7 will be used.
+  If you want to install zipp@3.17.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping zipp@3.16.2 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of zipp that supports Python>=3.7 will be used.
+  If you want to install zipp@3.16.2, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping zipp@3.16.1 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of zipp that supports Python>=3.7 will be used.
+  If you want to install zipp@3.16.1, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+tests/test_integration.py::test_basic_integration[3.9]
+  /Users/seb/Documents/KTH/04/dd2480/assignments/a4/pdm/src/pdm/resolver/providers.py:196: PackageWarning: Skipping zipp@3.16.0 because it requires Python>=3.8 but the project claims to work with Python>=3.7. Instead, another version of zipp that supports Python>=3.7 will be used.
+  If you want to install zipp@3.16.0, narrow down the `requires-python` range to include this version. For example, ">=3.8" should work.
+    return self.repository.find_candidates(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================================================================================================== short test summary info ===================================================================================================================
+SKIPPED [1] tests/test_utils.py:181: Windows test
+XFAIL tests/models/test_candidates.py::test_parse_abnormal_specifiers - packaging 22 no longer supports legacy specifiers
+============================================================================================ 827 passed, 1 skipped, 1 xfailed, 101 warnings in 150.01s (0:02:30) =============================================================================================
