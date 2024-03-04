@@ -62,6 +62,48 @@ Additionally, we should add completion for any arguments added to the CLI interf
 4. **ID 4**: This just involves a combination of the tests for ID 3 and ID 1. Write a test that updates both a dependency and a sub-dependency and assert that they get new versions.
 5. **ID 5**: Here we can update the sub-dependency and then look at the pyproject.toml file to ensure that the sub-dependency has not been added as a direct dependency.
 
+## Overview of the architecture and purpose of pdm
+
+A package manager is a system for handling the dependencies (or "packages") of a project. It finds the correct package files in a remote repository, checks them for vulnerabilities, downloads them and puts them in the correct locations. It also does this for all the package's sub-dependencies and removes all the appropriate files when the user wants to remove packages. `pdm` is a package manager for python and its purpose is to provide extra flexibility and customizability compared to other existing python package managers like Poetry and Hatch. 
+
+### Overview of PDM
+**Build system**<br>
+`pdm` uses a PEP 517 build backend, which is a build-system independent format, instead of relying on a tightly integrated built-in build backend like Poetry and Hatch does. This makes it possible for the user to choose their own build backend.
+
+**Metadata**<br>
+One of the features of pip is that it uses PEP 621 for project metadata and supports the latest PEP standard. The core metadata is described in a `pyproject.toml` file according to the latest standards which eliminates previous ambiguities. An example of this is that it is required to declare if metadata is static or dynamic.
+
+**Resolving**<br>
+When a new dependency is added, removed or updated `pdm` runs a series of check to make sure that the new set of dependencies are valid and there are no conflicts between dependencies. If there is, `pdm` tries to update and alter the versions within allowed ranges. 
+
+**Lock file**<br>
+`pdm` generates a lock file `pdm.lock` with the resolved result of all dependencies. locking in a package manager means locking down the versions of the dependencies that are used in the project. The function `do_lock` in `src/pdm/cli/actions.py` does that locking as well as updates the lock file. 
+
+**CLI interface**<br>
+The CLI interface consists of an extensive list of commands and options for initializing and managing the dependencies in the project. Below are a few examples of common CLI commands.
+- `init` - initializes a pyproject.tom
+- `add` - add packages to pyproject.toml and install them
+- `build` - build artifacts for distribution 
+- `remove` - removes files that match the argument pattern. 
+- `update` - all packages or only a specified package. `--update-eager` is an option for `pdm` to try to update the packages and their dependencies recursively. Another example of an option is `--update-all` which updates all packages in the toml file and their subdependencies. 
+
+For a more detailed overview of CLI commands and their options visit https://pdm-project.org/latest/reference/cli/
+
+**Plugin System**<br>
+This is a system that allows user to develop new `pdm` commands and command options and share them to the community. To develop a new command the user uses inheritance from a BaseCommand class and can add arguments with add_arguments and tether actions with handle. This is added to PyPI by the command publish. 
+
+**Architecture**<br>
+<div style="text-align:center;">
+    <figure>
+        <img src="img/architecture-diagram.png" alt="Diagram of the architecture" width="500"/>
+        <figcaption>Diagram of the architecture of pdm.</figcaption>
+    </figure>
+</div>
+
+**Conclusion**<br>
+`pdm` is a python dependency manager that offers customizability and flexibility compared to alternative dependency managers. It is capable of solving dependency conflicts between all dependencies and stores the resolved result in a lock file. It uses modern standards for describing its core metadata unambiguously and supports users to share plugins to PyPI.
+
+
 ## Effort spent
 
 For each team member, how much time was spent in
