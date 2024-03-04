@@ -100,6 +100,20 @@ Scope (functionality and code affected).
 
 Optional (point 3): trace tests to requirements.
 
+* test_update_transitive()
+    * This test adds the dependency `requests` and later updates the sub-dependency `chardet`. Asserts that the sub-dependency is still not in the pyproject.toml file and that the sub-dependency has been updated to the newest version from the virtual repository. Also asserts that the dependency `requests` has not been updated as this was not requested. 
+    * Fulfills requirements **ID 1** and **ID 5**
+
+* test_update_transitive_nonexistant_dependencies()
+    * This test adds the dependency `requests` and later attempts to update the non-existant sub-dependency `numpy`. This results in a "ProjectError" which is checked with two assertions. Thus throwing an error that the sub-dependency doesn't exist in the lock file.
+    * Fulfills requirements **ID 2**
+
+* test_update_transitive_non_transitive_dependencies()
+    * This test adds two dependencies `requests` and `pytz` and later updates both of these along with the sub-dependency `chardet`. It asserts that the sub-dependency is still not in the pyproject.toml file and asserts that the sub-dependency and the two dependencies are both updated to newer versions from the virtual repository even when utilizing the flag "--allow_transitive". 
+    * Fulfills requirements **ID 3**, **ID 4** and **ID 5**
+
+The three tests fulfill requirements **ID 1**, **ID 2**, **ID 3**, **ID 4** and **ID 5**. Thus we can see that our three different tests in turn test all our stated requirements resulting in good test coverage for our patch.
+
 ## Code changes
 
 ### Patch
@@ -165,8 +179,33 @@ How did you grow as a team, using the Essence standard to evaluate yourself?
 We felt that we worked very well during this project. This along with our previous progress and experiences from earlier assignments make us we feel that we've reached the working well phase of our way-of-working. Our team naturally follows our workflow guide regarding issues, testing and implementations of testing and documentation. This along with the fact the tools and methods we use actually help us perform good work are clear signs of a working group. When it comes to our team we also feel that we're performing on this front as we've worked together for quite some time and have established a functioning workflow independent of outside help. We feel that this last assignment has been a great oppurtunity to improve our ability to take initiative and tackle new uncharted problems without a clear framework. It has allowed us to actually test our new found skills and experiences and observe that they pratically work in the real world.
 
 ### P+ 
+You can argue critically about the benefits, drawbacks, and limitations of your work carried out, in the context of current software engineering practice, such as the SEMAT kernel (covering alphas other than Team/Way of Working).
+
 Optional (point 6): How would you put your work in context with best software engineering practice?
+
+The work that we carried out solves an issue requested by several people from the pdm GitHub. This corresponds to the "Oppurtunity" alpha from ESSENCE which descibes the circumstances appropriate to create or develop the software system/patch. This infers that our starting point and intentions for creating this patch were of good character where we aim to solve a real issue which can benefit the entire community. A limitation regarding our patch is that we've only taken into account the opinions and desires of individuals active on pdms GitHub. As we did not, and weren't able to, conduct a wider survey we might have missed valuable input which could've made our patch even more helpful to a wider majority. This corresponds to the "Stakeholders" alpha from ESSENCE which states that as much stakeholder involvement as possible throughout a software endeavor is necessary to ensure that acceptable software is produced. The stakeholders in this case are primarily the users of the project as well as the different contributors. In our case we were greatly limited by the timeline of the assignment and possibility to gain more insight regarding the customer desires making more customer input non-feasable. Our patch was also written in an existing function which was quite long and had a high cyclomatic complexity of 35 before we began implementing our patch. Thus our patch contributed to an even longer function with an even greater cyclomatic complexity of 41 which is one major drawback of our project. Thus our patch results in a function even more difficult to understand which increases the workload for future improvements and increases our technical debt. This is not optimal. Refactoring was not a part of our issue but nonetheless we created a refactoring plan aimed to solve this drawback which can be found below. We actively worked through the different requirements together thus sharing this understanding among the different stakeholders and our team members which expedited the development process.
+
+
+Refactoring plan for do_update(): 
+
+More about ESSENCE alphas:
+* Oppurtunity
+    * The issue that we solved was requested by several people already utilizing the pdm open source library. Thus there existed a "customer" need for the patch that we created. The articulated needs of the users were the foundation for our patch development and justified the reason for implementing it. We avoided implementing something that was not requested which can sometimes happen with large software companies/games where the company implements features that no one requested and actively ignore customer input which usually results in a worse product or customer experience. 
+* Stakeholders
+    * Since pdm is an open source project there is a large overlap between the stakeholders of the project and the project customers. Many of the people that use the library also contribute to its continuous evolution and improvement. Thus improving the library ultimately improves ones own work which creates a great incentive to contribute as well as ensure that patches are of high quality and throughly tested. 
+* Requirements
+    * Again since pdm is an open source project with many different contributors it can sometimes be difficult to understand the specific requirements for a given issue. Thankfully our issue was well explained with a concensus on how it should work and be implemented. We did however need to analyse the code ourselves in order to find specific requirements related to the actual implementation and testing of the patch.
+* Software system
+    * The software system alpha considers that the primary value of the software system is given by the execution of the software. Our patch is well implemented and well tested which adds to the overall performance of the open source library.
 
 Optional (point 7): Is there something special you want to mention here?
 
-Optional (point 8): Where do you put the project that you have chosen in an ecosystem of open-source and closed-source software? Is your project (as it is now) something that has replaced or can replace similar proprietary software? Why (not)? (Open source vs closed source software)
+## Optional point 8: PDM's relation to open source and proprietary software
+**Where do you put the project that you have chosen in an ecosystem of open-source and closed-source software? Is your project (as it is now) something that has replaced or can replace similar proprietary software? Why (not)? (Open source vs closed source software)** 
+
+As the authors explain in the README, PDM is an alternative to existing environment and package managers in Python. These include Pipenv, Poetry, and Hatch which are all open sourced projects. PDM was created first as a personal project and then grew to a package management tool with features that rivaling projects lack. Features like being able to use a custom build backend tool and having support for user-made plugins. 
+
+Since the rivaling projects of PDM are all open sourced, PDM isn't something that replaces or can replace proprietary software. The reason why PDM and all its competing projects are open sourced is most likely due to the fact that very few people would ever pay to use a package manager. To get many people to use it, it has to be free and to get contributors to help you, it has to be open source.  
+
+The project is under the MIT license which means that it  there are barely any restrictions on how one can use the code. Users can ''use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software''[MIT license](https://sv.wikipedia.org/wiki/MIT-licens). In an ecosystem of open-source and closed-source software, pdm sits right at the heart of open-source software.
