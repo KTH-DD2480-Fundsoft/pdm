@@ -149,4 +149,12 @@ Optional (point 6): How would you put your work in context with best software en
 
 Optional (point 7): Is there something special you want to mention here?
 
-Optional (point 8): Where do you put the project that you have chosen in an ecosystem of open-source and closed-source software? Is your project (as it is now) something that has replaced or can replace similar proprietary software? Why (not)? (Open source vs closed source software)
+## Optional point 8: PDM's relation to open source and proprietary software
+**Where do you put the project that you have chosen in an ecosystem of open-source and closed-source software? Is your project (as it is now) something that has replaced or can replace similar proprietary software? Why (not)? (Open source vs closed source software)** 
+
+As the authors explain in the README, PDM is an alternative to existing environment and package managers in Python. These include Pipenv, Poetry, and Hatch which are all open sourced projects. PDM was created first as a personal project and then grew to a package management tool with features that rivaling projects lack. Features like being able to use a custom build backend tool and having support for user-made plugins. 
+
+Since the rivaling projects of PDM are all open sourced, PDM isn't something that replaces or can replace proprietary software. The reason why PDM and all its competing projects are open sourced is most likely due to the fact that very few people would ever pay to use a package manager. To get many people to use it, it has to be free and to get contributors to help you, it has to be open source.  
+
+The project is under the MIT license which means that it  there are barely any restrictions on how one can use the code. Users can ''use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software''[MIT license](https://sv.wikipedia.org/wiki/MIT-licens). In an ecosystem of open-source and closed-source software, pdm sits right at the heart of open-source software.
